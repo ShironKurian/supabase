@@ -1,0 +1,33 @@
+# up.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: supabase
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: supabase-postgres
+  namespace: supabase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supabase-postgres
+  template:
+    metadata:
+      labels:
+        app: supabase-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgrest/postgrest:latest
+          env:
+            - name: POSTGRES_PASSWORD
+              value: examplepassword
+          ports:
+            - containerPort: 5432
+
+---
+# (Repeat for supabase-auth, API, Studio…)
